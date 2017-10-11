@@ -1,4 +1,4 @@
-if BOARD_LENOVO_X230
+if BOARD_LENOVO_X230 || BOARD_LENOVO_X230I
 
 config BOARD_SPECIFIC_OPTIONS # dummy
 	def_bool y
@@ -24,6 +24,24 @@ config BOARD_SPECIFIC_OPTIONS # dummy
 
 	# Workaround for EC/KBC IRQ1.
 	select SERIRQ_CONTINUOUS_MODE
+
+choice
+
+	depends on BOARD_LENOVO_X230I
+
+	prompt "X230i CPU TYPE"
+
+	config BROAD_HAVE_SANDYBRIDGE_I3_CPU
+		bool "X230i with SandyBridge i3 CPU"
+		default y
+
+	config BROAD_HAVE_SANDYBRIDGE_CELERON_CPU
+		bool "X230i with SandyBridge Celeron CPU"
+
+	config BROAD_HAVE_IVYBRIDGE_I3_CPU
+		bool "X230i with IvyBridge i3 CPU"
+
+endchoice
 
 config HAVE_IFD_BIN
 	bool
@@ -55,10 +73,14 @@ config DRAM_RESET_GATE_GPIO
 
 config VGA_BIOS_FILE
 	string
+	default "pci8086,0116.rom" if BROAD_HAVE_SANDYBRIDGE_I3_CPU
+	default "pci8086,0106.rom" if BROAD_HAVE_SANDYBRIDGE_CELERON_CPU
 	default "pci8086,0166.rom"
 
 config VGA_BIOS_ID
 	string
+	default "8086,0116" if BROAD_HAVE_SANDYBRIDGE_I3_CPU
+	default "8086,0106" if BROAD_HAVE_SANDYBRIDGE_CELERON_CPU
 	default "8086,0166"
 
 config MAINBOARD_PCI_SUBSYSTEM_VENDOR_ID
